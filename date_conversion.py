@@ -1,51 +1,73 @@
-#coding: utf-8
+# -*- coding: utf-8 -*-
 """
-Algumas funções para aritmética Dekatriana
-Roberto "Pena" Spinelli - 11\10\\2017
+Some functions to convert between Dekatrian and Gregorian calender.
+@author: Pena
+11\10\2017
 dekatrian.com
 """
+
+
 def Dek2week(dekDay, dekMonth, dekYear):
-    """Encontra o dia da semana gregoriano a partir de uma data dekatriana.
-    1 = domingo; 2 = segunda; 3 = terça ... 7 = sábado."""
-    weekDay = ((WeekdayOnFirstAuroran(dekYear) + DekatrianWeek(dekDay, dekMonth) - 2) % 7) + 1
+    """
+    Returns the Gregorian week day from a Dekatrian date.
+    1 = Sunday; 2 = Monday; 3 = Tuesday ... 7 = Saturday.
+    """
+    weekDay = ((WeekdayOnFirstAuroran(dekYear)
+                + DekatrianWeek(dekDay, dekMonth) - 2) % 7) + 1
     if dekMonth == 0:
         weekDay = ((weekDay - 3 + dekDay) % 7) + 1
     return weekDay
 
+
 def DekatrianWeek(dekDay, dekMonth):
-    """Encontra o dia da semana dekatriano a partir de uma data dekatriana.
-    A elegância do calendário aparece aqui, pois não é necessário passar o ano. Na verdade quase não é preciso passar o mês, ele só entra para checar se é o Achronian.
-    0 = Achronian; 1 = primeiro dia da semana; 2 = segundo dia ... 7 = sétimo dia."""
+    """
+    Returns the Dekatrian week day from a Dekatrian date.
+    Here we can see the elegance of Dekatrian, since it's not necessary to
+    inform the year. Actually, barely it's necessary to inform the month,
+    as it's only needed to check if that is an Achronian day.
+    0 = Achronian; 1 = first week day; 2 = second week day ... 7 = seventh.
+    """
     if dekMonth == 0:
         return 0
     else:
         dekWeekDay = ((dekDay-1) % 7) + 1
         return dekWeekDay
-    
+
+
 def WeekdayOnFirstAuroran(dekYear):
-    """Calcula o dia da semana gregoriano para o 1 Auroran de um dado ano"""
-    weekDay = ((1 + 5*((dekYear) % 4) + 4*((dekYear) % 100) + 6*((dekYear) % 400)) % 7) + 1
+    """
+    Returns the Gregorian week day for the 1 Auroran of a given year
+    """
+    weekDay = ((1 + 5*((dekYear) % 4) + 4*((dekYear) % 100)
+                + 6*((dekYear) % 400)) % 7) + 1
     return weekDay
 
+
 def CheckLeapYear(dekYear):
-    if (dekYear%4 == 0) and (dekYear%100 != 0 or dekYear%400 == 0):
+    if (dekYear % 4 == 0) and (dekYear % 100 != 0 or dekYear % 400 == 0):
         return 1
     else:
         return 0
 
+
 def YearDayOnDekaDate(dekDay, dekMonth, dekYear):
-    """Calcula qual o dia do ano de uma data Dekatrian.
-    Achronian é o dia 1.
-    Sinchronian é dia 2 quando houver."""
+    """
+    Returns the day of the year of a Dekatrian date.
+    Achronian is the day 1.
+    Sinchronian is day 2 when it exists.
+    """
     if dekMonth == 0:
         return dekDay
     else:
-        return (CheckLeapYear(dekYear)) + 1 +(dekMonth-1)*28 + dekDay
+        return (CheckLeapYear(dekYear)) + 1 + (dekMonth-1)*28 + dekDay
+
 
 def YearDayOnGregDate(day, month, year):
-    """Calcula qual o dia do ano de uma data Gregoriana.
-    1 Jan é o dia 1.
-    31 Dez é o dia 365 ou 366 se for bissexto"""
+    """
+    Returns the day of the year of a Gregorian date.
+    Jan 1 is the day 1.
+    Dez 31 is the day 365 or 366, whether it's a leap year or not
+    """
     Jan = 31
     Fev = 28 + CheckLeapYear(year)
     Mar = 31
@@ -59,7 +81,7 @@ def YearDayOnGregDate(day, month, year):
     Nov = 30
     Dez = 31
     Meses = (Jan, Fev, Mar, Apr, Mai, Jun, Jul, Ago, Set, Out, Nov, Dez)
-    i=0
+    i = 0
     days = 0
     while i < (month-1):
         days += Meses[i]
@@ -68,7 +90,9 @@ def YearDayOnGregDate(day, month, year):
 
 
 def Dek2Greg(dekDay, dekMonth, dekYear):
-    """Converte uma data Dekatrian para data Gregoriana"""
+    """
+    Returns a Dekatrian date from a Gregorian date.
+    """
     YearDay = YearDayOnDekaDate(dekDay, dekMonth, dekYear)
     Jan = 31
     Fev = 28 + CheckLeapYear(dekYear)
@@ -90,14 +114,17 @@ def Dek2Greg(dekDay, dekMonth, dekYear):
             break
     return (YearDay, mes, dekYear)
 
+
 def Greg2Dek(day, month, year):
-    """Converte uma data Gregoriana para data Dekatrian"""
+    """
+    Returns a Gregorian date from a Dekatrian date
+    """
     YearDay = YearDayOnGregDate(day, month, year)
     LeapYear = CheckLeapYear(year)
-    print YearDay
+    #print(YearDay)
     if YearDay > (1 + LeapYear):
         YearDay -= 1 + LeapYear
-        print YearDay
+        #print(YearDay)
         dekMonth = int((YearDay-1) / 28) + 1
         dekDay = (YearDay-1) % 28 + 1
     else:
@@ -105,14 +132,26 @@ def Greg2Dek(day, month, year):
         dekDay = day
     return (dekDay, dekMonth, year)
 
-### Exemplos ###
-#print Dek2week(28, 13, 2015)
-#print Dek2week(1, 0, 2016)
-#print Dek2week(2, 0, 2016)
-#print Dek2week(1, 1, 2016)
-#print DekatrianWeek(1, 0)
-#print WeekdayOnFirstAuroran(2016)
-#print YearDayOnDekaDate(3, 1, 2017)
-#print Dek2Greg(10, 10, 2017)
-#print YearDayOnGregDate (29, 12, 2016)
-#print Greg2Dek(3, 1, 2016)
+
+if __name__ == "__main__":
+    # Exemples #
+    print("Dekatrian 28\\13\\2015 falls on Greg week day: "
+          + str(Dek2week(28, 13, 2015)))
+    print("Dekatrian 1\\0\\2016 falls on Greg week day: "
+          + str(Dek2week(1, 0, 2016)))
+    print("Dekatrian 2\\0\\2016 falls on Greg week day: "
+          + str(Dek2week(2, 0, 2016)))
+    print("Dekatrian 1\\1\\2016 falls on Greg week day: "
+          + str(Dek2week(1, 1, 2016)))
+    print("Achronian corresponds to Dekatrian week day: "
+          + str(DekatrianWeek(1, 0)))
+    print("Dekatrian 1\\1\\2016 happens on Gregorian week day: "
+          + str(WeekdayOnFirstAuroran(2016)))
+    print("Dekatrian 3\\1\\2017 is the year day: "
+          + str(YearDayOnDekaDate(3, 1, 2017)))
+    print("Dekatrian 10\\10\\2017 corresponds to Gregorian "
+          + str(Dek2Greg(10, 10, 2017)))
+    print("Gregorian 29/12/2016 is the year day: "
+          + str(YearDayOnGregDate(29, 12, 2016)))
+    print("Gregorian 3/1/2016 corresponds to Dekatrian: "
+          + str(Greg2Dek(3, 1, 2016)))
