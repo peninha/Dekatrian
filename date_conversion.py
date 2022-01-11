@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Some functions to convert between Dekatrian and Gregorian calender.
+Some functions to convert between Dekatrian and Gregorian calendar.
 @author: Pena
 11\10\2017
 dekatrian.com
@@ -52,7 +52,7 @@ def CheckLeapYear(dekYear):
 
 def YearDayOnDekaDate(dekDay, dekMonth, dekYear):
     """
-    Returns the day of the year of a Dekatrian date.
+    Returns the day of the year from a Dekatrian date.
     Achronian is the day 1.
     Sinchronian is day 2 when it exists.
     """
@@ -64,7 +64,7 @@ def YearDayOnDekaDate(dekDay, dekMonth, dekYear):
 
 def YearDayOnGregDate(day, month, year):
     """
-    Returns the day of the year of a Gregorian date.
+    Returns the day of the year from a Gregorian date.
     Jan 1 is the day 1.
     Dez 31 is the day 365 or 366, whether it's a leap year or not
     """
@@ -91,7 +91,7 @@ def YearDayOnGregDate(day, month, year):
 
 def Dek2Greg(dekDay, dekMonth, dekYear):
     """
-    Returns a Dekatrian date from a Gregorian date.
+    Returns a Gregorian date from a Dekatrian date.
     """
     YearDay = YearDayOnDekaDate(dekDay, dekMonth, dekYear)
     Jan = 31
@@ -117,7 +117,7 @@ def Dek2Greg(dekDay, dekMonth, dekYear):
 
 def Greg2Dek(day, month, year):
     """
-    Returns a Gregorian date from a Dekatrian date
+    Returns a Dekatrian date from a Gregorian date
     """
     YearDay = YearDayOnGregDate(day, month, year)
     LeapYear = CheckLeapYear(year)
@@ -134,7 +134,7 @@ def Greg2Dek(day, month, year):
 
 
 if __name__ == "__main__":
-    # Exemples #
+    # Examples #
     print("Dekatrian 28\\13\\2015 falls on Greg week day: "
           + str(Dek2week(28, 13, 2015)))
     print("Dekatrian 1\\0\\2016 falls on Greg week day: "
